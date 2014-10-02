@@ -3,8 +3,7 @@ package TRA1.Trees;
 
 import fi.joensuu.cs.tra.*;
 
-import java.util.LinkedList;
-import java.util.Random;
+import java.util.*;
 
 import org.junit.experimental.max.*;
 
@@ -218,12 +217,12 @@ public class traI_14_t27_30_pohja {
      **/
     public static int korkeus(BTree t) {
         Integer korkeus = Math.max(korkeus(t.getRoot().getRightChild()), korkeus(t.getRoot().getLeftChild()));
-    	return korkeus;   // muuta tämä
+    	return korkeus+1; 
     }
     // solmun korkeus
     public static int korkeus(BTreeNode n) {
     	if (n == null) {
-			return 0;
+			return -1;
 		}
     	return Math.max(korkeus(n.getLeftChild()), korkeus(n.getRightChild())) +1;
     }
@@ -236,12 +235,26 @@ public class traI_14_t27_30_pohja {
      */
 
     public static BTreeNode matalin(BTree T) {
-        if (T.getRoot() == null)
-            return null;
-
-        // TODO
-
-        return null; // poista tämä
+    	BTreeNode root = T.getRoot();
+    	Queue<BTreeNode> tasoittainenJono = new LinkedList<BTreeNode>();
+    	tasoittainenJono.add(root);
+    	while (!tasoittainenJono.isEmpty()) {
+    		//Poistetaan node jonosta->ensimmäiseksi lisätty...
+    		//Katsotaan onko lapsia, jos ei ole niin kyseessä on selkeästi tapaus, jolla ei ole lapsia eli vähiten syvin
+    		//lehtisolmu
+    		BTreeNode node = tasoittainenJono.poll();
+    		if (node.getLeftChild() != null) {
+				tasoittainenJono.add(node.getLeftChild());
+			}
+			if (node.getRightChild() != null) {
+				tasoittainenJono.add(node.getRightChild());
+			}
+			if (node.getLeftChild() == null && node.getRightChild() == null) {
+				return node;
+			}
+    		
+		}
+		return null;
     } // matalin()
 
 
