@@ -1,8 +1,8 @@
 package TRA1.Trees;
 
-import fi.joensuu.cs.tra.*;
-
 import java.util.*;
+
+import fi.joensuu.cs.tra.*;
 
 
 public class traI_14_t25_26_pohja<E> {

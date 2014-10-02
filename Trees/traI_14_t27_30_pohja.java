@@ -1,13 +1,9 @@
 package TRA1.Trees;
 // BinPuuEsim.java SJ
 
-import fi.joensuu.cs.tra.*;
-
 import java.util.*;
 
-import org.junit.experimental.max.*;
-
-import com.sun.javafx.geom.AreaOp.*;
+import fi.joensuu.cs.tra.*;
 
 public class traI_14_t27_30_pohja {
 
