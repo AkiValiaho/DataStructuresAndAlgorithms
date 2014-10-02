@@ -6,6 +6,8 @@ import fi.joensuu.cs.tra.*;
 import java.util.LinkedList;
 import java.util.Random;
 
+import org.junit.experimental.max.*;
+
 import com.sun.javafx.geom.AreaOp.*;
 
 public class traI_14_t27_30_pohja {
@@ -215,19 +217,16 @@ public class traI_14_t27_30_pohja {
      * pisimmän polun juuresta lehtisolmuun. Aikavaativuus? Vihje: rekursio.
      **/
     public static int korkeus(BTree t) {
-        // TODO
-        return 0;   // muuta tämä
+        Integer korkeus = Math.max(korkeus(t.getRoot().getRightChild()), korkeus(t.getRoot().getLeftChild()));
+    	return korkeus;   // muuta tämä
     }
-
-
     // solmun korkeus
     public static int korkeus(BTreeNode n) {
-        // TODO
-        return 0;
+    	if (n == null) {
+			return 0;
+		}
+    	return Math.max(korkeus(n.getLeftChild()), korkeus(n.getRightChild())) +1;
     }
-
-
-
     /**
      * 30. Kirjoita algoritmi joka etsii binääripuun matalimman (vähiten syvän)
      * lehtisolmun. Aikavaativuus?
