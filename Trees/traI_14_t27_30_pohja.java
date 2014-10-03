@@ -23,6 +23,7 @@ public class traI_14_t27_30_pohja {
             System.out.print(x + " ");
             inorderInsert(puu, x);
         }
+        
         System.out.println();
 
         System.out.println("Sisäjärjestyksessä:");
@@ -46,6 +47,7 @@ public class traI_14_t27_30_pohja {
             System.out.print(n.getElement() + " ");
             n = inorderNext(n);
         }
+        
         System.out.println();
 
         System.out.println("Korkeus = " + korkeus(puu));
@@ -56,11 +58,41 @@ public class traI_14_t27_30_pohja {
             System.out.println("Matalin = null");
         else
             System.out.println("Matalin = " + n.getElement());
-
+        puu.getRoot().setElement(2);
+        if (onkoSisaJarjestyksessa(puu)) {
+			System.out.println("Puu on sisäjärjestyksessä");
+		} else {
+			System.out.println("Puu ei ole sisäjärjestyksessä");
+		}
 
     } // main()
 
-
+    public static <E extends Comparable<? super E>> Boolean onkoSisaJarjestyksessa(BTree<E> tarkastettavaPuu) {
+     	if (tarkastettavaPuu.getRoot() == null) {
+			return true;
+		}
+    	LinkedList<E> minneLisataan = new LinkedList<>();
+    	//Tarkastetaan onko linkedlist järjestyksessä
+    	onkoSisaJarjestysessaAlgoritmi(tarkastettavaPuu.getRoot(), minneLisataan);
+    	for (ListIterator<E> iterator = minneLisataan.listIterator(); iterator.hasNext();) {
+			E x1 =iterator.next();
+			E x2 = iterator.next();
+			if (x1.compareTo(x2) > 0) {
+				return false;
+			}
+			iterator.previous();
+		}
+    	return true;
+    }
+    private static <E> void onkoSisaJarjestysessaAlgoritmi(BTreeNode<E> node,LinkedList<E> minneLisataan) {
+    	//Traversataan puu läpi
+    	if (node == null) {
+			return;
+		}
+    	onkoSisaJarjestysessaAlgoritmi(node.getLeftChild(), minneLisataan);
+    	minneLisataan.add(node.getElement());
+    	onkoSisaJarjestysessaAlgoritmi(node.getRightChild(), minneLisataan);
+    }
 
     public static BTree<Integer> exampleBTree() {
 
@@ -232,6 +264,9 @@ public class traI_14_t27_30_pohja {
 
     public static BTreeNode matalin(BTree T) {
     	BTreeNode root = T.getRoot();
+    	if (root == null) {
+			return null;
+		}
     	Queue<BTreeNode> tasoittainenJono = new LinkedList<BTreeNode>();
     	tasoittainenJono.add(root);
     	while (!tasoittainenJono.isEmpty()) {
@@ -248,7 +283,6 @@ public class traI_14_t27_30_pohja {
 			if (node.getLeftChild() == null && node.getRightChild() == null) {
 				return node;
 			}
-    		
 		}
 		return null;
     } // matalin()
