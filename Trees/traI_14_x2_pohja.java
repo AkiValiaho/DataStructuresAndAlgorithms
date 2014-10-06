@@ -211,33 +211,33 @@ public class traI_14_x2_pohja {
     	 * rekursoi seuraavat alilistat alasp‰in
     	 * @return
     	 */
-    	private static <E extends Comparable<? super E>>
-    	BTreeNode<E> arrayToInorderTreeAlgorithm(List<E> subList)  {
-    		Integer listanKeskelle;
-    		if (subList.size() % 2 != 0) {
-				listanKeskelle = subList.size()/2;
-			} else {
-				listanKeskelle = subList.size()/2;
-			}
-        	int listanKoko = subList.size();
-        	if (listanKoko == 0) {
-				return null;
-			}
-			BTreeNode<E> palautettavaAlkio = new BTreeNode<E>(subList.get(listanKeskelle));
-			if (listanKoko == 1) {
-				return palautettavaAlkio;
-			}
-			//Samaan tapaan kuin wrapperissa, vied‰‰n alilistoja rekursion pohjalle
-			BTreeNode<E> leftChild = arrayToInorderTreeAlgorithm(subList.subList(0, listanKeskelle));
-			if (leftChild != null) {
-				palautettavaAlkio.setLeftChild(leftChild);
-			}
-    		BTreeNode<E> rightChild = arrayToInorderTreeAlgorithm(subList.subList(listanKeskelle+1, listanKoko));
-    		if (rightChild != null) {
-				palautettavaAlkio.setRightChild(rightChild);
-			}
-			return palautettavaAlkio;
+    private static <E extends Comparable<? super E>>
+    BTreeNode<E> arrayToInorderTreeAlgorithm(List<E> subList)  {
+    	Integer listanKeskelle;
+    	if (subList.size() % 2 != 0) {
+    		listanKeskelle = subList.size()/2;
+    	} else {
+    		listanKeskelle = subList.size()/2;
     	}
+    	int listanKoko = subList.size();
+    	if (listanKoko == 0) {
+    		return null;
+    	}
+    	BTreeNode<E> palautettavaAlkio = new BTreeNode<E>(subList.get(listanKeskelle));
+    	if (listanKoko == 1) {
+    		return palautettavaAlkio;
+    	}
+    	//Samaan tapaan kuin wrapperissa, vied‰‰n alilistoja rekursion pohjalle
+    	BTreeNode<E> leftChild = arrayToInorderTreeAlgorithm(subList.subList(0, listanKeskelle));
+    	if (leftChild != null) {
+    		palautettavaAlkio.setLeftChild(leftChild);
+    	}
+    	BTreeNode<E> rightChild = arrayToInorderTreeAlgorithm(subList.subList(listanKeskelle+1, listanKoko));
+    	if (rightChild != null) {
+    		palautettavaAlkio.setRightChild(rightChild);
+    	}
+    	return palautettavaAlkio;
+    }
     //Teht‰v‰ 33
     public static <E extends Comparable<? super E>> Boolean isInorder(BTree<E> tarkastettavaPuu) {
      	if (tarkastettavaPuu.getRoot() == null) {
