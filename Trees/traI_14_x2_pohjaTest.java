@@ -1,5 +1,6 @@
 package TRA1.Trees;
 
+
 import static org.junit.Assert.*;
 
 import java.util.*;
@@ -19,21 +20,21 @@ import fi.joensuu.cs.tra.*;
  *
  */
 public class traI_14_x2_pohjaTest<E extends Comparable<? super E>> {
-	private TRA_X2 x2Pohja;
+	private akivv x2Pohja;
 	/**
 	 * @throws java.lang.Exception
 	 */
 	@Before
 	public void setUp() throws Exception {
-		this.x2Pohja = new TRA_X2();
+		this.x2Pohja = new akivv();
 	}
 	/**
-	 * Test method for {@link TRA_X2#inorderTreeToArray(fi.joensuu.cs.tra.BTree)}.
+	 * Test method for {@link akivv#inorderTreeToArray(fi.joensuu.cs.tra.BTree)}.
 	 */
 	@Test
 	public void testInorderTreeToArrayWithEmptyTree() {
 		ArrayList<E> tyhjaArrayListi;
-		tyhjaArrayListi = TRA_X2.inorderTreeToArray(new BTree<E>());
+		tyhjaArrayListi = akivv.inorderTreeToArray(new BTree<E>());
 		assertNull(tyhjaArrayListi);
 		
 	}
@@ -41,7 +42,7 @@ public class traI_14_x2_pohjaTest<E extends Comparable<? super E>> {
 	public void testInorderTreeToArrayWithNullTree() {
 		ArrayList<E> tyhjaArrayList;
 		BTree<E> nullTree = null;
-		tyhjaArrayList = TRA_X2.inorderTreeToArray(nullTree);
+		tyhjaArrayList = akivv.inorderTreeToArray(nullTree);
 		assertNull(tyhjaArrayList);
 	}
 	
@@ -51,7 +52,7 @@ public class traI_14_x2_pohjaTest<E extends Comparable<? super E>> {
 		BTree<Integer> T = new BTree<Integer>();
 		BTreeNode<Integer> uusiNode = new BTreeNode<Integer>(1);
 		T.setRoot(uusiNode);
-		tyhjaArrayListi = TRA_X2.inorderTreeToArray(T);
+		tyhjaArrayListi = akivv.inorderTreeToArray(T);
 		ArrayList<Integer> wanted = new ArrayList<>();
 		wanted.add(1);
 		assertArrayEquals(wanted.toArray(), tyhjaArrayListi.toArray());
@@ -64,7 +65,7 @@ public class traI_14_x2_pohjaTest<E extends Comparable<? super E>> {
 		T.setRoot(uusiNode);
 		T.getRoot().setLeftChild(new BTreeNode<Integer>(7));
 		T.getRoot().getLeftChild().setLeftChild(new BTreeNode<Integer>(6));
-		tyhjaArrayListi = TRA_X2.inorderTreeToArray(T);
+		tyhjaArrayListi = akivv.inorderTreeToArray(T);
 		ArrayList<Integer> wanted = new ArrayList<>();
 		wanted.add(6);
 		wanted.add(7);
@@ -79,7 +80,7 @@ public class traI_14_x2_pohjaTest<E extends Comparable<? super E>> {
 		T.setRoot(uusiNode);
 		T.getRoot().setRightChild(new BTreeNode<Integer>(11));
 		T.getRoot().getRightChild().setRightChild(new BTreeNode<Integer>(12));
-		tyhjaArrayListi = TRA_X2.inorderTreeToArray(T);
+		tyhjaArrayListi = akivv.inorderTreeToArray(T);
 		ArrayList<Integer> wanted = new ArrayList<>();
 		wanted.add(10);
 		wanted.add(11);
@@ -94,7 +95,7 @@ public class traI_14_x2_pohjaTest<E extends Comparable<? super E>> {
 		T.setRoot(uusiNode);
 		T.getRoot().setRightChild(new BTreeNode<Integer>(11));
 		T.getRoot().setLeftChild(new BTreeNode<Integer>(9));
-		tyhjaArrayListi = TRA_X2.inorderTreeToArray(T);
+		tyhjaArrayListi = akivv.inorderTreeToArray(T);
 		ArrayList<Integer> wanted = new ArrayList<>();
 		wanted.add(9);
 		wanted.add(10);
@@ -115,25 +116,29 @@ public class traI_14_x2_pohjaTest<E extends Comparable<? super E>> {
 			for (int j = 0; j < luku; j++) {
 				tyhjaArrayListi.add(ran.nextInt(1000)+10);
 			}
+			HashSet<Integer> hs = new HashSet<Integer>();
+			hs.addAll(tyhjaArrayListi);
+			tyhjaArrayListi.clear();
+			tyhjaArrayListi.addAll(hs);
 			Collections.sort(tyhjaArrayListi);
-			ArrayList<Integer> wanted = TRA_X2.inorderTreeToArray(TRA_X2.arrayToInorderTree(tyhjaArrayListi));
+			ArrayList<Integer> wanted = akivv.inorderTreeToArray(akivv.arrayToInorderTree(tyhjaArrayListi));
 			assertArrayEquals(wanted.toArray(), tyhjaArrayListi.toArray());
 		}
 	}
 	/**
-	 * Test method for {@link TRA_X2#arrayToInorderTree(java.util.ArrayList)}.
+	 * Test method for {@link akivv#arrayToInorderTree(java.util.ArrayList)}.
 	 */
 	@Test
 	public void testArrayToInorderTreeNullArray() {
 		ArrayList<Integer> tyhjaArrayListi = null;
-		BTree<Integer> palautettavaTree = TRA_X2.arrayToInorderTree(tyhjaArrayListi);
+		BTree<Integer> palautettavaTree = akivv.arrayToInorderTree(tyhjaArrayListi);
 		assertNull(palautettavaTree);
 		
 	}
 	@Test
 	public void testArrayToInorderTreeEmptyArray() {
 		ArrayList<Integer> tyhjaArrayListi = new ArrayList<>();
-		BTree<Integer> palautettavaTree = TRA_X2.arrayToInorderTree(tyhjaArrayListi);
+		BTree<Integer> palautettavaTree = akivv.arrayToInorderTree(tyhjaArrayListi);
 		assertNull(palautettavaTree);
 		
 	}
@@ -146,11 +151,11 @@ public class traI_14_x2_pohjaTest<E extends Comparable<? super E>> {
 		}
 		
 		int i;
-		BTree<Integer> palautettavaTree = TRA_X2.arrayToInorderTree(requiredArrayList);
-		ArrayList<Integer> output = TRA_X2.inorderTreeToArray(palautettavaTree);
+		BTree<Integer> palautettavaTree = akivv.arrayToInorderTree(requiredArrayList);
+		ArrayList<Integer> output = akivv.inorderTreeToArray(palautettavaTree);
 	
 		assertEquals(requiredArrayList, output);
-		Boolean sisajarjestys =TRA_X2.isInorder(palautettavaTree);
+		Boolean sisajarjestys =akivv.isInorder(palautettavaTree);
 		assertTrue(sisajarjestys);
 		//BTreePrinter asdf = new BTreePrinter();
 		//BTreePrinter.printNode(palautettavaTree.getRoot());
@@ -165,11 +170,11 @@ public class traI_14_x2_pohjaTest<E extends Comparable<? super E>> {
 		}
 		
 		int i;
-		BTree<Integer> palautettavaTree = TRA_X2.arrayToInorderTree(requiredArrayList);
-		ArrayList<Integer> output = TRA_X2.inorderTreeToArray(palautettavaTree);
+		BTree<Integer> palautettavaTree = akivv.arrayToInorderTree(requiredArrayList);
+		ArrayList<Integer> output = akivv.inorderTreeToArray(palautettavaTree);
 	
 		assertEquals(requiredArrayList, output);
-		Boolean sisajarjestys =TRA_X2.isInorder(palautettavaTree);
+		Boolean sisajarjestys =akivv.isInorder(palautettavaTree);
 		assertTrue(sisajarjestys);
 //		BTreePrinter asdf = new BTreePrinter();
 //		BTreePrinter.printNode(palautettavaTree.getRoot());
@@ -184,11 +189,11 @@ public class traI_14_x2_pohjaTest<E extends Comparable<? super E>> {
 		}
 		
 		int i;
-		BTree<Integer> palautettavaTree = TRA_X2.arrayToInorderTree(requiredArrayList);
-		ArrayList<Integer> output = TRA_X2.inorderTreeToArray(palautettavaTree);
+		BTree<Integer> palautettavaTree = akivv.arrayToInorderTree(requiredArrayList);
+		ArrayList<Integer> output = akivv.inorderTreeToArray(palautettavaTree);
 	
 		assertEquals(requiredArrayList, output);
-		Boolean sisajarjestys =TRA_X2.isInorder(palautettavaTree);
+		Boolean sisajarjestys =akivv.isInorder(palautettavaTree);
 		assertTrue(sisajarjestys);
 //		BTreePrinter asdf = new BTreePrinter();
 //		BTreePrinter.printNode(palautettavaTree.getRoot());
@@ -202,10 +207,10 @@ public class traI_14_x2_pohjaTest<E extends Comparable<? super E>> {
 			requiredArrayList.add(required[j]);
 		}
 		int i;
-		BTree<Integer> palautettavaTree = TRA_X2.arrayToInorderTree(requiredArrayList);
-		ArrayList<Integer> output = TRA_X2.inorderTreeToArray(palautettavaTree);
+		BTree<Integer> palautettavaTree = akivv.arrayToInorderTree(requiredArrayList);
+		ArrayList<Integer> output = akivv.inorderTreeToArray(palautettavaTree);
 		assertEquals(requiredArrayList, output);
-		Boolean sisajarjestys =TRA_X2.isInorder(palautettavaTree);
+		Boolean sisajarjestys =akivv.isInorder(palautettavaTree);
 		assertTrue(sisajarjestys);
 //		BTreePrinter asdf = new BTreePrinter();
 //		BTreePrinter.printNode(palautettavaTree.getRoot());
@@ -224,11 +229,15 @@ public class traI_14_x2_pohjaTest<E extends Comparable<? super E>> {
 			for (int j = 0; j < luku; j++) {
 				requiredArrayList.add(ran.nextInt(1000)+1);
 			}
+			HashSet<Integer> hs = new HashSet<Integer>();
+			hs.addAll(requiredArrayList);
+			requiredArrayList.clear();
+			requiredArrayList.addAll(hs);
 			Collections.sort(requiredArrayList);
-			BTree<Integer> palautettavaTree = TRA_X2.arrayToInorderTree(requiredArrayList);
-			ArrayList<Integer> output = TRA_X2.inorderTreeToArray(palautettavaTree);
+			BTree<Integer> palautettavaTree = akivv.arrayToInorderTree(requiredArrayList);
+			ArrayList<Integer> output = akivv.inorderTreeToArray(palautettavaTree);
 			assertEquals(requiredArrayList, output);
-			Boolean sisajarjestys =TRA_X2.isInorder(palautettavaTree);
+			Boolean sisajarjestys =akivv.isInorder(palautettavaTree);
 			assertTrue(sisajarjestys);
 //			BTreePrinter asdf = new BTreePrinter();
 //			BTreePrinter.printNode(palautettavaTree.getRoot());
@@ -239,7 +248,7 @@ public class traI_14_x2_pohjaTest<E extends Comparable<? super E>> {
 //			System.out.println("\n");
 //			System.out.println(traI_14_t27_30_pohja.korkeus(palautettavaTree));
 			//Tarkastetaan vielä onko korkeus varmasti logaritminen
-			assertTrue(Math.log10(output.size())/Math.log10(2)<traI_14_t27_30_pohja.korkeus(palautettavaTree)+1);
+			assertTrue((Math.log10(output.size())/Math.log10(2))+0.01>traI_14_t27_30_pohja.korkeus(palautettavaTree));
 		}
 		}
 		
