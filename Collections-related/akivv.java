@@ -1,194 +1,200 @@
-// traI_14_x1_pohja.java SJ
-// P‰‰ohjelma viikon 4 teht‰v‰‰n X1
 import java.util.*;
-// TODO: muuta luokan nimeksi oman s‰hkˆpostiosoitteesi alkuosa!
-public class akivv {
-    // P‰‰ohjelman k‰yttˆ:
-    // java traI_14_x1_pohja [N] [N2] [S] [eri]
-    // miss‰ N on alkioiden m‰‰r‰, N2 on alkoiden m‰‰r‰ toisessa taulukossa
-    // ja S on satunnaislukusiemen
-    // jos eri on olemassa, taulukoissa ei ole samoja alkioita
-    // kannattaa testata monipuolisesti erilaisilla syˆtteill‰ ja vaikka
-    // tehd‰ eri versioita syˆtteen generoinnista
-    public static void main(String[] args) {
-        // taulukoiden koko
-        int N1 = 10;
-        if (args.length > 0)
-            N1 = Integer.valueOf(args[0]);
-        int N2 = N1;
-        if (args.length > 0)
-            N2 = Integer.valueOf(args[1]);
-        // satunnaislukusiemen
-        int siemen = 1;
-        if (args.length > 2)
-            siemen = Integer.valueOf(args[2]);
-        // saako olla samoja alkioita
-        int eri = 0;
-        if (args.length > 3)
-            eri = 1;
-        // teht‰v‰ X1: j‰rjestettyjen listojen yhdiste
-        // luodaan esimerkkitaulukot
-        Integer[] T1 = new Integer[N1];
-        Integer[] T2 = new Integer[N2];
-        java.util.Random r = new java.util.Random(siemen);
-        // t‰ytet‰‰n alkioilla ja j‰rjestet‰‰n
-        for (int i = 0; i < N1; i++) {
-            T1[i] = r.nextInt(N1);
-        }
-        java.util.Arrays.sort(T1);
-        for (int i = 0; i < N2; i++) {
-            T2[i] = r.nextInt(N2*2) + eri * N1;
-        }
-        java.util.Arrays.sort(T2);
-        // tulostetaan taulukot jos alkioita ei ole paljoa
-        if (N1 <= 20 && N2 <= 20) {
-            System.out.print("T1: ");
-            for (int i = 0; i < N1; i++)
-                System.out.print(" " + T1[i]);
-            System.out.println();
-            System.out.print("T2: ");
-            for (int i = 0; i < N2; i++)
-                System.out.print(" " + T2[i]);
-            System.out.println();
-        }
-        // Muodostetaan taulukoista LinkedList:t ja TraLinkedList:t
-        LinkedList<Integer> L1 = new LinkedList<Integer>();
-        LinkedList<Integer> L2 = new LinkedList<Integer>();
-        for (Integer x : T1) {
-            L1.add(x);
-        }
-        for (Integer x : T2) {
-            L2.add(x);
-        }
-        // kutsutaan teht‰v‰‰ X1
-        // n‰ist‰ riitt‰‰ tehd‰ toinen!
-        LinkedList<Integer> Yhd = yhdisteX1(L1, L2);
-        System.out.print("Teht‰v‰ X1    (LinkedList), yhdiste = ");
-        if (N1 <= 20 && N2 <= 20) {
-            for (Integer i : Yhd)
-                System.out.print(" " + i);
-            System.out.println();
-        } else {
-            System.out.println(Yhd.size() + " alkiota");
-        }
-    }
-    
-	/**
-	 * T‰m‰ metodi mahdollistaa kahden j‰rjestetyn linkitetyn listan yhdist‰misen
-	 * lineaarisella aikavaativuudella.
-	 * @param L1
-	 * @param L2
-	 * @return
-	 */
-	public static <E extends Comparable<? super E>> LinkedList<E> yhdisteX1(LinkedList<E> L1, LinkedList<E> L2) {
-    	//Kokonaisuudessaan metodin laskennallisesti merkitt‰v‰t osuudet tekev‰t 4n operaatiota -> O(n)
-		//K‰ytet‰‰n t‰ss‰ timantti(diamond)operaattoria. Timanttioperaattori
-    	//alustaa uuden LinkedListin aidosti geneerisen‰. Toisinsanoen, uudelle
-    	//listalle tulee sama tyyppiparametri kuin lauseen vasemmallekin puolelle.
-    	//T‰ll‰ menettelytavalla saadaan geneeristen lauseiden hyˆty ilman ylim‰‰r‰isten
-    	//tyyppiparametrien kirjoittamisvaivaa. K‰‰nt‰misen aikana n‰hd‰‰n siis
-    	//geneeristen tyyppien paljastamat virheet.
-    	LinkedList<E> unionOfTwo = new LinkedList<>();
-    	//Ensin lienee tarpeellista poistaa molemmista tapauksista duplikaatit, jotta niit‰ ei
-    	//n‰kyisi lopullisessa yhdisteess‰. Kaiken yhdist‰minen nyt tuhoaisi yhdistelistasta
-    	//j‰rjestyksen ja olisi v‰ltt‰m‰tˆnt‰ j‰rjest‰‰ uudelleen koko yhdistelista, joka johtaisi
-    	//jopa Collectionsin sortilla aikavaativuuteen O(nlogn) (mergesort).
-    	E poistettava = null;
-    	//Ensin L1
-    	//Whilen bodyn suorittaminen vie pahimmassa tapauksessa
-    	//if-lauseen ensimm‰isen operaation bodyn verran aikaa, joka se on vakioaikainen
-    	//
-    	Iterator<E> it = L1.iterator();
-    	//O(n)
-    	while (it.hasNext()) {
-    		E seuraava=it.next();
-			if (seuraava.equals(poistettava)) {
-				it.remove();
-			}
-			else {
-				poistettava=seuraava;
-			}
-			}
-    	//Sitten L2
-    	poistettava = null;
-    	Iterator<E> it2 = L2.iterator();
-    	//O(n)
-    	while (it2.hasNext()) {
-    		E seuraava=it2.next();
-			if (seuraava.equals(poistettava)) {
-				it2.remove();
-			}
-			else {
-				poistettava=seuraava;
-			}
-			}
-    	//Nyt molemmat j‰rjestetyt listat ovat duplikaatittomia, toisinsanoen niiden alkup‰‰ss‰ on molemmissa
-    	//samoissa indekseiss‰ samat arvot (jos listoissa on yhteisi‰ arvoja). Poistetaan yhteiset
-    	//duplikaatit. Tarvitsemme duplikaattien poistoon listIteraattoria, koska tulemme tarvitsemaan
-    	//previousta alkioiden asettamiseen oikeaan j‰rjestykseen (esimerkkitapauksessa listassa L2 on luku yhdeks‰n
-    	//joka on pienempi kuin 4,5 ja 8. Emme siis voi vaan poistaa lukua 9, muuten lista ei s‰ilytt‰isi j‰rjestyst‰‰n ja lukuja tulisi minne sattuu)
-    	ListIterator<E> duplikaatinPoistajaIteraattoriL1 = L1.listIterator();
-    	ListIterator<E> duplikaatinPoistajaIteraattoriL2 = L2.listIterator();
-    	E lista1Arvo = null;
-    	E lista2Arvo = null;
-    	//O(n) pahimman tapauksen mukaan
-    	//Pahin tapaus t‰lle ohjelmaosalle on kaksi kasvavaa listaa muodossa
-    	//T1 = 1,3,5,7..... T2= 2,4,6,8....
-    	//T‰lloin iteraattorin paikkaa joudutaan vaihtamaan kokoajan lis‰ten operaatioita
-    	//K‰yt‰nnˆss‰ jokaisella whilen suorituskerralla listalta poistuu kuitenkin
-    	//aina yksi alkio, jolloin operaatioita suoritetaan jotakuinkin n+m-1 -> O(n)
-    	while (duplikaatinPoistajaIteraattoriL1.hasNext() && duplikaatinPoistajaIteraattoriL2.hasNext()) {
-    		//next on vakioaikainen operaatio
-    		lista1Arvo = duplikaatinPoistajaIteraattoriL1.next();
-    		lista2Arvo = duplikaatinPoistajaIteraattoriL2.next();
-    		Integer compareToResult = lista1Arvo.compareTo(lista2Arvo);
-				if (compareToResult == 0) {
-					//Molemmat arvot ovat yht‰suuret
-					//Indeksitˆn add ei traversaa koko linkitetty‰ listaa l‰pi vaan lis‰‰ 
-					//tallennettuun loppup‰‰h‰n nextiksi addattavan arvon---> vakioaikainen operaatio
-					unionOfTwo.add(lista1Arvo);
-					//Myˆskin vakioaikainen operaatio
-					duplikaatinPoistajaIteraattoriL1.remove();
-					duplikaatinPoistajaIteraattoriL2.remove();
-				} else {
-					//On huomattavaa, ett‰ n‰iss‰ ei voida suoraan k‰ytt‰‰ == operaatiota!
-					//Esimerkiksi Charactereja vertailtaessa compareTo() voi palauttaa muitakin lukuja kuin
-					//0, -1 ja 1. K‰ytet‰‰n siis <  ja > merkintˆj‰.
-					if (compareToResult > 0) {
-						//lista1Arvo on suurempi kuin lista2Arvo
-						unionOfTwo.add(lista2Arvo);
-						duplikaatinPoistajaIteraattoriL2.remove();
-						duplikaatinPoistajaIteraattoriL1.previous();
-					} else {
-						if (compareToResult < 0) {
-							//lista1Arvo on pienempi kuin lista2Arvo
-							unionOfTwo.add(lista1Arvo);
-							duplikaatinPoistajaIteraattoriL1.remove();
-							duplikaatinPoistajaIteraattoriL2.previous();
-						}
-					}
-				}
+///**
+// * Teht‰v‰ X3
+// * T‰m‰ luokka on annetun pakka-rajapinnan toteutus. Luokasta lˆytyy rajapinnassa
+// * annetut metodit onkoTyhja(), lisaaAlkuun(E x), lisaaLoppuun(E x), alku(),
+// * loppu(), poistaAlusta(), poistaLopusta() sek‰ toteutus luokan iteraattorille ja toString()-metodille
+// * debuggauksen helpottamista varten.
+// * 
+// * Tietorakenne on dynaamisesti kahteen suuntaan linkitetty ja 
+// * toimii ajatuksen tasolla fyysisen pelikorttipakan tavoin; luokasta
+// * ei lˆydy operaatiota, jolla voitaisiin muokata alkioita keskelt‰ pakkaa. Toisinsanoen, 
+// * rakenteeseen voidaan tehd‰ operaatioita pelk‰st‰‰n pinkan pohjalle ja p‰‰lle. T‰st‰ voisi
+// * olla hyˆty‰ esimerkiksi silloin, kun halutaan varmistua ett‰ ohjelmoija ei tule k‰ytt‰neeksi
+// * vahingossa indeksipohjaisia operaatioita, jotka ovat pahimmassa tapauksessa lineaarisia linkitetylle rakenteelle.
+// * 
+// * Kaikki t‰ss‰ luokassa olevat operaatiot ovat vakioaikaisia (lukuunottamatta toString()-metodia, joka on lineaarinen).
+// * Luokkaa voisi jatkokehitt‰‰ kirjoittamalla esimerkiksi k‰ytt‰j‰n haluamaan suuntaan lukevan iteraattorin.
+// * Luokalle voisi kehitell‰ myˆs jonkinlaisen addAll()-metodin. Collections-rajapintaa tuskin kannattaisi 
+// * implementoida kuitenkaan suoraan, sill‰ silloin overridett‰isiin myˆs rajapinnan indeksipohjaiset operaatiot.
+// * @author Aki
+// * @param <E>
+// */
+public class akivv<E> implements Pakka<E>,Iterable<E>{
+	@Override
+	public String toString() {
+		Iterator<E> iterator = iterator();
+		StringBuilder theString = new StringBuilder();
+		while (iterator.hasNext()) {
+			E e = iterator.next();
+			theString.append(e);
+			theString.append(" ");
 		}
-    		//Lis‰t‰‰n lopuksi suurempi tapauksista yhdisteeseen
-    		Integer sizeOf1 = L1.size(); //Collection-luokan menetelm‰t tallentavat size-tiedon variableen
-    		//eli t‰m‰ lause on vakioaikainen O(1)
-    		//public int size() {
-    		//return size;
-    		//}
-    		Integer sizeof2 = L2.size();
-    		//O(n) pidemm‰n tapauksen mukaan
-    		if (sizeOf1 > sizeof2) {
-				for (Iterator<E> iterator = L1.iterator(); iterator
-						.hasNext();) {
-					unionOfTwo.add(iterator.next());
-				}
-			} else {
-				for (Iterator<E> iterator = L2.iterator(); iterator
-						.hasNext();) {
-					unionOfTwo.add(iterator.next());
+		return theString.toString();	
+	}
+	private node last = null;
+	private node first = null;
+	private node curr = null;
+	public akivv() {
+		// TODO Auto-generated constructor stub
+	}
+	public akivv(E x) {
+		lisaaAlkuun(x);
+	}
+	@Override
+	public boolean onkoTyhja() {
+		if (last == null || first == null) {
+			return true;
+		} else {
+			return false;
+		}
+	}
+	@Override
+	public void lisaaAlkuun(E x) {
+		//Tarkistetaan ensin onko t‰ss‰ rakenteessa yht‰‰n mit‰‰n
+		//Jos rakenne on tyhj‰ niin ensimm‰inen ja viimeinen ovat tietysti
+		//t‰m‰ lis‰tt‰v‰ tapaus
+		if (onkoTyhja()) {
+			node toFirstAndLast = new node(x);
+			this.first = toFirstAndLast;
+			this.last = toFirstAndLast;
+			return;
+		}
+		//Tehd‰‰n uusi node ‰ks‰ll‰
+		node toAdd = new node(x);
+		//Otetaan t‰m‰nhetkinen ensimm‰inen talteen
+		node tmp = first;
+		//Asetetaan uusi ensimm‰iseksi
+		this.first = toAdd;
+		//Asetetaan ensimm‰isen seuraavaksi
+		//entinen ensimm‰inen
+		this.first.next = tmp;
+		//Laitetaan edelliseksi null
+		this.first.previous = null;
+		//Korjataan entinen osoittamaan oikeaa previousta
+		tmp.previous = this.first;
+	}
+	@Override
+	public void lisaaLoppuun(E x) {
+		//Tarkistetaan ensin onko t‰ss‰ rakenteessa yht‰‰n mit‰‰n
+		//Jos rakenne on tyhj‰ niin ensimm‰inen ja viimeinen ovat tietysti
+		//t‰m‰ lis‰tt‰v‰ tapaus
+		if (onkoTyhja()) {
+			node toFirstAndLast = new node(x);
+			this.first = toFirstAndLast;
+			this.last = toFirstAndLast;
+			return;
+		}
+		//Tehd‰‰n uusi node ‰ks‰ll‰
+		node toAdd = new node(x);
+		//T‰m‰nhetkinen talteen
+		node tmpLast = this.last;
+		//Asetetaan uusi viimeiseksi
+		this.last = toAdd;
+		//Asetetaan nulliksi seuraava
+		this.last.next = null;
+		//Asetetaan previous arvoksi vanha viimeinen
+		this.last.previous = tmpLast;
+		//Korjataan entinen viimeinen osoittamaan oikeaa nexti‰
+		tmpLast.next = this.last;
+	}
+	@Override
+	public E alku() throws NoSuchElementException {
+		if (onkoTyhja()) {
+			throw new NoSuchElementException();
+		}
+		return first.dataValue;
+	}
+	@Override
+	public E loppu() throws NoSuchElementException {
+		if (onkoTyhja()) {
+			throw new NoSuchElementException();
+		}
+		return last.dataValue;
+	}
+	@Override
+	public E poistaAlusta() throws NoSuchElementException {
+			//Onko tyhj‰
+			if (onkoTyhja()) {
+				throw new NoSuchElementException();
 			}
+			//Tarkistetaan onko t‰m‰ mahdollisesti viimeinen poistettava tapaus!
+			if (last.previous == null) {
+				node tmp = first;
+				last = null;
+				first = null;
+				return tmp.dataValue;
 			}
-    		//Vakioaikainen operaatio
-			return unionOfTwo;
-    }
+			node newFirst = first.next;
+			node returnableFirst = first;
+			first = newFirst;
+			returnableFirst.next = null;
+			returnableFirst.previous = null;
+			first.previous = null;
+			return returnableFirst.dataValue;
+	}
+	@Override
+	public E poistaLopusta() throws NoSuchElementException{
+			//Tarkistetaan onko tyhj‰
+			if (onkoTyhja()) {
+				throw new NoSuchElementException();
+			}
+			//Tarkistetaan onko t‰m‰ viimeinen poistettava tapaus
+			if (last.previous == null) {
+				node tmp = last;
+				last = null;
+				first = null;
+				return tmp.dataValue;
+			}
+			//Otetaan t‰m‰nhetkiset arvot muistiin
+			node newLast = this.last.previous;
+			node currentLast = this.last;
+			//asetetaan uudeksi lastiksi newLast
+			this.last = newLast;
+			//Korjataan next osoittamaan nullia
+			this.last.next = null;
+			//palautetaan poistetun dataValue
+			return currentLast.dataValue;
+	}
+	@Override
+	public Iterator<E> iterator() throws NoSuchElementException{
+		if (onkoTyhja()) {
+			throw new NoSuchElementException();
+		}
+		curr = first;
+		return new pakkaIterator();
+	}
+	//	/**
+	//	 * Yksitt‰inen datakapseli, sis‰lt‰‰ kaksisuuntaiset
+	//	 * viittaukset edelliseen ja seuraavaan kapseliin tietorakenteessa
+	//	 * @author Aki
+	//	 */
+	class node {
+		private node next = null;
+		private node previous = null;
+		private E dataValue = null;
+		public node(E dataToInput) {
+			this.dataValue = dataToInput;
+		}
+	}
+	/**
+	 * Luokan iteraattorin toteutus. Voisi tarvittaessa jatkokehitell‰
+	 * esimerkiksi toiseenkin suuntaan toimivaksi? 
+	 * @author Aki
+	 *
+	 */
+	class pakkaIterator implements Iterator<E> {
+		@Override
+		public boolean hasNext() {
+			// TODO Auto-generated method stub
+			return curr!=null;
+		}
+		@Override
+		public E next() {
+			// TODO Auto-generated method stub
+			node tmp = curr;
+			curr = curr.next;
+			return tmp.dataValue;
+		}
+	}
 }
