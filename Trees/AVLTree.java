@@ -92,14 +92,36 @@ public class AVLTree<E extends Comparable<? super E>> {
 			liittoNode.setRightChild(tmp);
 		} else if (lastBalance == 2 && tmpBalance == -1) {
 			Node liittoNode = tmp.getParent().getParent();
-			oikeaVasen(tmp.getLeftChild());
-			kierraVasemmalle(tmp);
-			//right-left kierto
-		} else if (lastBalance == -2 && tmpBalance == 1) {
 			vasenOikea(tmp.getRightChild());
-			kierraOikealle(tmp);
-			//left-right kierto
+			kierraVasemmalle(tmp);
+		} else if (lastBalance == -2 && tmpBalance == 1) {
+			tmp = oikeaVasen(tmp);
+			Node tmpParent = tmp.getParent();
+			Node chainBeginning = tmpParent.getParent();
+			if (chainBeginning.getLeftChild() == tmpParent) {
+				chainBeginning.setLeftChild(kierraVasemmalle(tmp));
+			}
+			if (chainBeginning.getRightChild() == tmpParent) {
+				chainBeginning.setRightChild(kierraVasemmalle(tmp));
+			}
 		}
+	}
+
+	private void vasenOikea(Node tmp) {
+
+	}
+
+	private Node oikeaVasen(Node tmp) {
+		Node tmpLeftChild = tmp.getLeftChild();
+		Node tmpParent = tmp.getParent();
+		if (tmpLeftChild.getRightChild() != null) {
+			tmp.setLeftChild(tmpLeftChild.getRightChild());
+			tmpLeftChild.getRightChild().setParent(tmp);
+		}
+		tmpLeftChild.setRightChild(tmp);
+		tmp.setParent(tmpLeftChild);
+		tmpLeftChild.setParent(tmpParent);
+		return tmpLeftChild
 	}
 
 	private Node kierraVasemmalle(Node tmp) {
