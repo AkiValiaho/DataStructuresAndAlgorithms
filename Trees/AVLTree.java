@@ -108,7 +108,16 @@ public class AVLTree<E extends Comparable<? super E>> {
 	}
 
 	private void vasenOikea(Node tmp) {
-
+		Node tmpRightChild = tmp.getRightChild();
+		Node tmpParent = tmp.getParent();
+		if (tmpRightChild.getLeftChild() != null) {
+			tmp.setRightChild(tmpRightChild.getRightChild());
+			tmpRightChild.getLeftChild().setParent(tmp);
+		}
+		tmpRightChild.setRightChild(tmp);
+		tmp.setParent(tmpRightChild);
+		tmpRightChild.setParent(tmpParent);
+		return tmpRightChild;
 	}
 
 	private Node oikeaVasen(Node tmp) {
